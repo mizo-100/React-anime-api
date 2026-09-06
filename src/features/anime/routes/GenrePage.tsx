@@ -8,12 +8,21 @@ export const GenrePage = () => {
   const navigate = useNavigate();
   const [selectedGenre, setSelectedGenre] = useState<{ id: number; name: string } | null>(null);
 
-  const { data: genresRes, isLoading: isGenresLoading } = useSWR(jikanApi.getGenres, fetcher);
+  const { data: genresRes, isLoading: isGenresLoading } = useSWR(jikanApi.getGenres, fetcher,
+    {
+      revalidateOnFocus: false,
+      dedupingInterval: 60000,
+    }
+  );
   const genres: GenreItem[] = genresRes?.data || [];
 
   const { data: animeRes, isLoading: isAnimeLoading } = useSWR(
     selectedGenre ? jikanApi.getAnimeByGenre(selectedGenre.id) : null,
-    fetcher
+    fetcher,
+    {
+      revalidateOnFocus: false,
+      dedupingInterval: 60000,
+    }
   );
   const animeList: AnimeItem[] = animeRes?.data || [];
 

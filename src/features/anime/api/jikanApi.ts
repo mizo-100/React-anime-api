@@ -71,5 +71,4 @@ export const jikanApi = {
   getAnimeDetail: (id: string | number) => `/anime/${id}`,
   getGenres: "/genres/anime",
 };
-
 */

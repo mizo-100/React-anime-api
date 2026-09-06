@@ -7,9 +7,13 @@ import type { AnimeItem } from '../types/anime';
 export const IndexPage = () => {
   const navigate = useNavigate();
 
-  const { data: bannerRes, isLoading: isBannerLoading } = useSWR(
+  const { data: bannerRes, isLoading: isBannerLoading, error: bannerError } = useSWR(
     jikanApi.getRandomAnime,
-    fetcher
+    fetcher,
+    {
+      revalidateOnFocus: false,
+      dedupingInterval: 60000,
+    }
   );
   const bannerAnime: AnimeItem | null = bannerRes?.data || null;
 
@@ -21,7 +25,11 @@ export const IndexPage = () => {
   return (
     <div className="max-w-6xl mx-auto px-4 py-8 space-y-12">
       <section className="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-100">
-        {isBannerLoading ? (
+        {bannerError ? (
+          <div className="p-6 text-center text-red-500">
+            バナーの取得に失敗しました
+          </div>
+        ) : isBannerLoading ? (
           <div className="h-64 flex items-center justify-center bg-gray-100 text-gray-400">
             バナー読み込み中...
           </div>
@@ -48,13 +56,45 @@ export const IndexPage = () => {
             </div>
           </div>
         ) : (
-          <div className="p-6 text-center text-gray-500">バナーの取得に失敗しました</div>
+          <div className="p-6 text-center text-gray-500">
+            バナーの取得に失敗しました
+          </div>
         )}
       </section>
 
       <div className="space-y-12">
         {genreSections.map((genre) => {
-          const { data } = useSWR(jikanApi.getAnimeByGenre(genre.id), fetcher);
+          const { data, error, isLoading } = useSWR(
+          jikanApi.getAnimeByGenre(genre.id),
+          fetcher,
+          {
+            revalidateOnFocus: false,
+            dedupingInterval: 60000,
+          }
+        );
+
+        if (isLoading) {
+          return (
+            <section key={genre.id} className="space-y-4">
+              <h3 className="text-2xl font-bold text-gray-800 border-l-4 border-green-600 pl-3">
+                {genre.title}
+              </h3>
+              <div className="text-gray-500">読み込み中...</div>
+            </section>
+          );
+        }
+
+        if (error) {
+          return (
+             <section key={genre.id} className="space-y-4">
+              <h3 className="text-2xl font-bold text-gray-800 border-l-4 border-green-600 pl-3">
+                {genre.title}
+              </h3>
+              <div className="text-red-500">データの取得に失敗しました</div>
+            </section>
+          );
+        }
+
           const animeList: AnimeItem[] = data?.data || [];
 
           return (
