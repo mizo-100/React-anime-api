@@ -1,22 +1,18 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import useSWR from 'swr';
-import { fetcher, jikanApi } from '../api/jikanApi';
-import type { AnimeItem } from '../types/anime';
+import { useAnimeDetail } from '../hooks/useAnimeDetail';
 
 export const DetailPage = () => {
+
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
-  const { data: res, isLoading, error } = useSWR(
-    id ? jikanApi.getAnimeDetail(id) : null,
-    fetcher
-  );
-
-  const anime: AnimeItem | null = res?.data || null;
+  const { anime, isLoading, error } = useAnimeDetail(id);
 
   const formatDate = (dateString?: string) => {
-    if (!dateString) return "不明";
+    if (!dateString) return '不明';
+
     const date = new Date(dateString);
+
     return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
   };
 
