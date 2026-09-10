@@ -4,15 +4,13 @@ import { NavItems } from "./const/NavItems";
 import { useHeader } from "./hooks/useHeader";
 
 export const Header = () => {
-
   const {
     isOpen,
+    setIsOpen,
     isModalOpen,
+    setIsModalOpen,
     isHidden,
     handleNavigate,
-    toggleMenu,
-    toggleModal,
-    closeMenu,
   } = useHeader();
 
   if (isHidden) {
@@ -50,7 +48,7 @@ export const Header = () => {
 
           <div className="relative">
             <button
-              onClick={toggleModal}
+              onClick={() => setIsModalOpen(!isModalOpen)}
               className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-green-400 transition-colors"
             >
               <User size={20} />
@@ -75,7 +73,7 @@ export const Header = () => {
           </div>
         </div>
 
-        <button onClick={toggleMenu} className="md:hidden text-gray-800 p-2">
+        <button onClick={() => setIsOpen(!isOpen)} className="md:hidden text-gray-800 p-2">
           {isOpen ? <X size={26} /> : <Menu size={26} />}
         </button>
       </div>
@@ -86,7 +84,7 @@ export const Header = () => {
         <div className="absolute top-full left-0 w-full bg-white shadow-lg border-b border-gray-200 py-6 px-6 flex flex-col space-y-4 md:hidden z-50">
           <nav className="flex flex-col space-y-3 text-sm text-gray-700">
             {NavItems.map((item) => (
-              <Link key={item.href} to={item.href} onClick={closeMenu} className="hover:text-green-400">
+              <Link key={item.href} to={item.href} onClick={() => setIsOpen(false)} className="hover:text-green-400">
                 {item.label}
               </Link>
             ))}

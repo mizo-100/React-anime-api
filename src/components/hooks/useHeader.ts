@@ -14,25 +14,12 @@ export const useHeader = () => {
     navigate(path);
   };
 
-  const toggleMenu = () => {
-    setIsOpen((prev) => !prev);
-  };
-
-  const toggleModal = () => {
-    setIsModalOpen((prev) => !prev);
-  };
-
-  const closeMenu = () => {
-    setIsOpen(false);
-  };
-
   return {
     isOpen,
+    setIsOpen,
     isModalOpen,
+    setIsModalOpen,
     isHidden: location.pathname === '/',
     handleNavigate,
-    toggleMenu,
-    toggleModal,
-    closeMenu,
   };
-}
+};
