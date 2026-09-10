@@ -1,12 +1,24 @@
-import './App.css'
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import './App.css';
+import { Header } from './components/Header';
+import { DetailPage } from './features/anime/routes/DetailPage';
+import { GenrePage } from './features/anime/routes/GenrePage';
+import { IndexPage } from './features/anime/routes/IndexPage';
+import { SignupPage } from './features/auth/SignupPage';
+import { MyPage } from './features/user/MyPage';
 
 function App() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100">
-      <h1 className="text-3xl font-bold text-blue-600 underline">
-        Tailwind CSS が有効になりました！
-      </h1>
-    </div>
+    <Router>
+      <Header/>
+      <Routes>
+        <Route path="/" element={<SignupPage/>} />
+        <Route path="/index" element={<IndexPage />} />
+        <Route path="/detail/:id" element={<DetailPage />} />
+        <Route path="/mypage" element={<MyPage />} />
+        <Route path="/genre" element={<GenrePage />} />
+      </Routes>
+    </Router>
   );
 }
 
