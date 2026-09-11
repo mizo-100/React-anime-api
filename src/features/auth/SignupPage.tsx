@@ -8,6 +8,7 @@ export const SignupPage = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const emailRegex = /^[^\s@.](?:[^\s@]*[^\s@.])?@[^\s@]+\.[^\s@]+$/;
 
   const validate = () => {
     const newErrors: { [key: string]: string } = {};
@@ -16,7 +17,7 @@ export const SignupPage = () => {
       newErrors.username = "ユーザー名は半角英数字8〜15文字で入力してください。";
     }
 
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    if (!emailRegex.test(email) || email.includes("..")) {
       newErrors.email = "有効なメールアドレスを入力してください。";
     }
 
